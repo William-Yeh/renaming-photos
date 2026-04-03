@@ -42,16 +42,15 @@ Also requires [`uv`](https://docs.astral.sh/uv/getting-started/installation/).
 
 Tell your agent:
 
-> Rename all photos in `~/Pictures/vacation/` by their shot date.
+- `Rename all photos in ~/Pictures/vacation/ by their shot date.`
+- `/rename-photos ~/Pictures/vacation/`
+- `Rename photos in /mnt/sdcard using Taiwan time (+08:00).`
+- `Dry-run rename for ~/Downloads/trip to preview changes.`
 
-> `/rename-photos ~/Pictures/vacation/`
-
-> Rename photos in `/mnt/sdcard` using Taiwan time (+08:00).
-
-The agent will run:
+### CLI
 
 ```bash
-uv run scripts/rename_photos.py [OPTIONS] DIR [DIR ...]
+uv run skill/scripts/rename_photos.py [OPTIONS] DIR [DIR ...]
 ```
 
 | Option | Default | Description |

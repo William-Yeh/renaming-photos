@@ -5,7 +5,7 @@ from datetime import timedelta, datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from scripts.rename_photos import (
+from skill.scripts.rename_photos import (
     validate_date,
     parse_offset,
     resolve_datetime,
@@ -74,29 +74,29 @@ class TestResolveDatetime:
         assert dt.year == 2024
 
     def test_user_tz_differs_from_local_adds_suffix(self):
-        with patch('scripts.rename_photos.local_offset', return_value=timedelta(hours=0)):
+        with patch('skill.scripts.rename_photos.local_offset', return_value=timedelta(hours=0)):
             dt, suffix = resolve_datetime(self.RAW, {}, '+08:00')
         assert suffix == ' +0800'
 
     def test_user_tz_same_as_local_no_suffix(self):
-        with patch('scripts.rename_photos.local_offset', return_value=timedelta(hours=8)):
+        with patch('skill.scripts.rename_photos.local_offset', return_value=timedelta(hours=8)):
             dt, suffix = resolve_datetime(self.RAW, {}, '+08:00')
         assert suffix is None
 
     def test_exif_offset_differs_from_local_adds_suffix(self):
         exif = {'OffsetTimeOriginal': '+09:00'}
-        with patch('scripts.rename_photos.local_offset', return_value=timedelta(hours=0)):
+        with patch('skill.scripts.rename_photos.local_offset', return_value=timedelta(hours=0)):
             dt, suffix = resolve_datetime(self.RAW, exif, None)
         assert suffix == ' +0900'
 
     def test_user_tz_takes_priority_over_exif(self):
         exif = {'OffsetTimeOriginal': '+09:00'}
-        with patch('scripts.rename_photos.local_offset', return_value=timedelta(hours=0)):
+        with patch('skill.scripts.rename_photos.local_offset', return_value=timedelta(hours=0)):
             dt, suffix = resolve_datetime(self.RAW, exif, '+08:00')
         assert suffix == ' +0800'
 
     def test_negative_offset_suffix(self):
-        with patch('scripts.rename_photos.local_offset', return_value=timedelta(hours=0)):
+        with patch('skill.scripts.rename_photos.local_offset', return_value=timedelta(hours=0)):
             dt, suffix = resolve_datetime(self.RAW, {}, '-05:00')
         assert suffix == ' -0500'
 
@@ -220,10 +220,10 @@ DEFAULT_FMT = '%Y-%m-%d %H.%M.%S'
 
 class TestProcessFile:
     def _mock_exif(self, data):
-        return patch('scripts.rename_photos.extract_exif', return_value=data)
+        return patch('skill.scripts.rename_photos.extract_exif', return_value=data)
 
     def _mock_local(self, hours=0):
-        return patch('scripts.rename_photos.local_offset', return_value=timedelta(hours=hours))
+        return patch('skill.scripts.rename_photos.local_offset', return_value=timedelta(hours=hours))
 
     def test_happy_path_renames_file(self, tmp_path):
         photo = tmp_path / 'IMG_001.jpg'

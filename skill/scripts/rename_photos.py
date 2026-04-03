@@ -1,3 +1,7 @@
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.10"
+# ///
 """Rename photo files based on EXIF shot date."""
 
 import argparse
